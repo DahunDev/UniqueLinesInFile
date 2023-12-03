@@ -8,7 +8,7 @@ abc<br>
 This is sample sentence<br>
 abc<br>
 bcd<br>
-<br>This is sample sentence<br>
+This is sample sentence<br>
 This is sample sentence with/without whitespace after   <br>
 This is sample sentence with/without whitespace after<br>
 <br>
