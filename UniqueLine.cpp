@@ -108,7 +108,6 @@ int main(int argc, char **argv)
 
 void loadAndOutput(std::string inputFileName, short outputType, std::string outPutFileName)
 {
-    std::cout << outputType << std::endl;
     std::ifstream inputfile;
     inputfile.open(inputFileName);
     if (inputfile.is_open())
