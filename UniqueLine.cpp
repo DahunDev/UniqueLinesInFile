@@ -6,7 +6,7 @@
 #include <cctype>
 
 void loadAndOutput(std::string inputFile, short outputType, std::string outPutFile); // load file and make output, outputType is between 0 to 2, (0: print only, 1: write only, 2: write and print)
-bool equalsIgnoreCaseWhiteSpace(char* str1, char* str2);
+bool equalsIgnoreWhiteSpace(std::string str1, std::string str2);
 
 int main(int argc, char **argv)
 { // argc will be number of argument, including shell name
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
                        [](unsigned char c)
                        { return std::tolower(c); });
 
-        if (yesNo == "yes")
+        if (equalsIgnoreWhiteSpace(yesNo, "yes"))
         {
             std::string output;
             std::cout << "Enter the output fileName: ";
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
                            [](unsigned char c)
                            { return std::tolower(c); });
 
-            if (yesNo == "yes")
+            if (equalsIgnoreWhiteSpace(yesNo, "yes"))
             {
                 loadAndOutput(input, 2, output);
             }
@@ -102,11 +102,13 @@ int main(int argc, char **argv)
         std::cout << "Note: If the filename has space then it should be enclosed with \"" << std::endl;
     }
 
+    char dummy;
     return 0;
 }
 
 void loadAndOutput(std::string inputFileName, short outputType, std::string outPutFileName)
 {
+    std::cout << outputType << std::endl;
     std::ifstream inputfile;
     inputfile.open(inputFileName);
     if (inputfile.is_open())
@@ -144,6 +146,7 @@ void loadAndOutput(std::string inputFileName, short outputType, std::string outP
                 else
                 {
                     std::cout << "Failed to write file " << outPutFileName << std::endl;
+                    std::cout << "Reason: " << std::strerror(errno) << std::endl;
                 }
             }
             else if (outputType == 2)
@@ -163,6 +166,8 @@ void loadAndOutput(std::string inputFileName, short outputType, std::string outP
                 else
                 {
                     std::cout << "Failed to write file " << outPutFileName << std::endl;
+                    std::cout << "Reason: " << std::strerror(errno) << std::endl;
+
                 }
             }
 
@@ -173,10 +178,48 @@ void loadAndOutput(std::string inputFileName, short outputType, std::string outP
     }
     else
     {
-        std::cout << "Failed to load file " << inputFileName << std::endl;
+        std::cout << "Failed to read file " << inputFileName << std::endl;
+        std::cout << "Reason: " << std::strerror(errno) << std::endl;
+
     }
 }
 
-bool equalsIgnoreCaseWhiteSpace(char* str1, char* str2){
+bool equalsIgnoreWhiteSpace(std::string str1, std::string str2)
+{
+    int l = 0;
+    int r = 0;
+    while (str1[l] != '\0' && std::isspace(static_cast<unsigned char>(str1[l])))
+    {
+        l++;
+    }
+    while (str2[r] != '\0' && std::isspace(static_cast<unsigned char>(str2[r])))
+    {
+        r++;
+    }
 
+    while (str1[l] != '\0' && str2[r] != '\0')
+    {
+        //std::cout << l << ", " << r << str1[l] << ", " << str2[r] << "\n";
+
+        if (str1[l] != str2[r])
+        {
+            return false;
+        }
+        else if (str1[l] == '\0')
+        {
+            return true;
+        }
+        l++;
+        r++;
+        while (str1[l] != '\0' && std::isspace(static_cast<unsigned char>(str1[l])))
+        {
+            l++;
+        }
+        while (str2[r] != '\0' && std::isspace(static_cast<unsigned char>(str2[r])))
+        {
+            r++;
+        }
+    }
+
+    return str1[l] == str2[l];
 }
